@@ -1,0 +1,18 @@
+{
+    "config": {
+        "bin-dir": "bin",
+        "process-timeout": 600
+    },
+    "minimum-stability": "stable",
+    "name": "gyg/backend-server",
+    "license": "",
+    "type": "project",
+    "description": "\"Get your guide\" backend server.",
+    "autoload": {
+        "psr-0": { "": "src/" }
+    },
+    "require": {
+        "escapestudios/symfony2-coding-standard": "3.x-dev",
+        "phpunit/phpunit": "6.*"
+    }
+}

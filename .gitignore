@@ -1,0 +1,11 @@
+# Vendor files
+backend/vendor/
+backend/bin/
+backend/var/log/*
+
+# IDE files
+/nbproject
+.project
+.settings
+.idea
+.DS_Store

@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+  gyg.middleware:
+        mem_limit: 2G
+        build: ./middleware
+        ports:
+            - "${EXPOSED_PORT}:${EXPOSED_PORT}"
+        environment:
+            SERVICE_NAME: middleware
+            SERVICE_TAGS: local
+            CONFIG_FILE_PATH: ${CONFIG_FILE_PATH}
+        privileged: false
+
+
