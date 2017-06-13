@@ -1,17 +1,27 @@
 # Prerequisites
 
-- Install php7.1, composer, docker, docker-compose
+- Install git, golang, php7.1, composer, docker, docker-compose
 - Go inside backend folder, and then run `composer install`
+- Install go lang.
+- Copy the middleware folder to be under $GOPATH/src/gyg/, so the final paht should be $GOPATH/src/gyg/middleware/.....
+- Run `go install .`, then `go build`, then you should have binary called "middleware"
+- Run "./middleware"
+- Go inside backend folder
+- Run this command `php -S localhost:8080`
 
 # Installation
 
 Run the following command
 `bash run-docker-env.sh`
 
+# Middleware
+- The middleware is configurable "middleware/config/main.json", where the backend configuration be changed,
+    also the path to the config file can be overridden during run time by passing the option --config file_path.
+- The fetching process is done concurrently with loading rating data.
+
 # Backend
 
 ## Coding
-- Using docker container.
 - Used Symfony coding standard.
 - Used composer to install dependencies.
 - Applied PSR-0 for loading files.
@@ -33,7 +43,8 @@ in the queue to get  the file handle.
  - A find by city strategy has a criteria which is EqualTo.
 
 ## Todo
-- Using code coverage using unit test.
+- Using docker containers.
+- Applying code coverage using unit test.
 - Using Apache thrift or Google protocol buffer for large outputs.
 - Using Value objects as in DDD.
 - Logs

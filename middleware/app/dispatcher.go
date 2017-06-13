@@ -20,6 +20,7 @@ type (
 	}
 
 	Tour struct {
+		Id      string  `json:"id"`
 		Title	string	`json:"title"`
 		Price	float64	`json:"price"`
 		Currency	string	`json:"currency"`
@@ -29,7 +30,7 @@ type (
 )
 
 var (
-	output chan *map[string]*Tour
+	output chan map[string]map[string]*Tour
 )
 
 func NewDispatcher(logger *loggerLib.Logger) *Dispatcher {
@@ -41,7 +42,7 @@ func NewDispatcher(logger *loggerLib.Logger) *Dispatcher {
 func (d *Dispatcher) Run() *Dispatcher {
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	output = make(chan *map[string]*Tour, 2000)
+	output = make(chan map[string]map[string]*Tour, 2000)
 
 	return d
 }
@@ -77,7 +78,9 @@ func (d *Dispatcher) dispatch(searchTerm string) {
 
 	wg.Wait()
 
-	mergedData := new(map[string]*Tour)
+	mergedData := map[string]map[string]*Tour{
+		"tours": map[string]*Tour{},
+	}
 
 	if tours != nil && ratings != nil {
 		mergedData, err = mergeData(tours, ratings)
@@ -134,14 +137,18 @@ func loadRating() (*config.Ratings, error) {
 	return &parsedRating, nil
 }
 
-func mergeData(tours *config.Tours, ratings *config.Ratings) (*map[string]*Tour, error) {
-	data := map[string]*Tour{}
+func mergeData(tours *config.Tours, ratings *config.Ratings) (map[string]map[string]*Tour, error) {
+	data := map[string]map[string]*Tour{
+		"tours": map[string]*Tour{},
+	}
+
 	ratingTrack := map[string]int{}
 
 	for _, tour := range tours.Items {
 		id := strconv.Itoa(tour.Id)
 
-		data[id] = &Tour{
+		data["tours"][id] = &Tour{
+			Id: id,
 			Title: tour.Title,
 			Price: tour.Price,
 			Currency: tour.Currency,
@@ -159,14 +166,14 @@ func mergeData(tours *config.Tours, ratings *config.Ratings) (*map[string]*Tour,
 
 		if _, ok := data[id]; ok {
 			ratingTrack[id]++
-			(*data[id]).Rating += ratingValue
+			(*data["tours"][id]).Rating += ratingValue
 		}
 	}
 
 	for id, count := range ratingTrack {
-		ratingValue := (*data[id]).Rating
-		(*data[id]).Rating = math.Floor(ratingValue / float64(count))
+		ratingValue := data["tours"][id].Rating
+		(*data["tours"][id]).Rating = math.Floor(ratingValue / float64(count))
 	}
 
-	return &data, nil
+	return data, nil
 }

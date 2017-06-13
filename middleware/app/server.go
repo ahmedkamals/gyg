@@ -6,6 +6,7 @@ import (
 	"log"
 	"gyg/middleware/config"
 	"github.com/kr/pretty"
+	"io"
 )
 
 type (
@@ -37,7 +38,9 @@ func handler(s *Server) func(http.ResponseWriter, *http.Request) {
 
 func (s *Server) respond(r *http.Request, w http.ResponseWriter) {
 
-	w.Header().Set("Content-Type", "application/json")
+	//w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Type", r.Header.Get("Content-Type"))
+	w.Header().Set("Content-Disposition", "attachment; filename=\"results.json\"")
 	w.Header().Set("Access-Control-Allow-Origin", "*");
 	w.Header().Set("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
 	w.Header().Set("Access-Control-Allow-Credentials", "true");
@@ -46,11 +49,16 @@ func (s *Server) respond(r *http.Request, w http.ResponseWriter) {
 
         searchTerm := r.URL.Query().Get("query")
 	s.dispatcher.dispatch(searchTerm)
+
+	pretty.Println("Request:" + r.URL.String())
+
 	// Locking on Aggregated data
 	data := <-output
 
-	err := json.NewEncoder(w).Encode(data)
+	pretty.Println(data)
 
+	err := json.NewEncoder(w).Encode(data)
+	io.Copy(w, jso.en)
 	if err != nil {
 		pretty.Println("Server:" + err.Error())
 	}
