@@ -78,6 +78,7 @@ func (d *Dispatcher) dispatch(searchTerm string) {
 	wg.Wait()
 
 	mergedData := new(map[string]*Tour)
+
 	if tours != nil && ratings != nil {
 		mergedData, err = mergeData(tours, ratings)
 

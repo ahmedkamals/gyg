@@ -1,8 +1,9 @@
 #!/bin/bash
 
-SERVER_SOURCE=./backend/
+SERVER_SOURCE=./backend/src
 WORK_DIR=/www/gyg
-EXPOSED_PORT=8000
+MIDDLEWARE_PORT=8000
+BACKEND_PORT=8080
 IDE_KEY="PHPSTORM"
 XDEBUG_PORT=9999
 CONFIG_FILE_PATH="config/main.json"
@@ -22,14 +23,16 @@ done
 
 export SERVER_SOURCE="$SERVER_SOURCE"
 export WORK_DIR="$WORK_DIR"
-export EXPOSED_PORT="$EXPOSED_PORT"
+export BACKEND_PORT="$BACKEND_PORT"
+export MIDDLEWARE_PORT="$MIDDLEWARE_PORT"
 export IDE_KEY="$IDE_KEY"
 export XDEBUG_PORT="$XDEBUG_PORT"
 export CONFIG_FILE_PATH="$CONFIG_FILE_PATH"
 
+echo "Middleware exposed port: $MIDDLEWARE_PORT"
 echo "Server source dir: $SERVER_SOURCE"
 echo "Server working dir: $WORK_DIR"
-echo "Server exposed port: $EXPOSED_PORT"
+echo "Server exposed port: $BACKEND_PORT"
 echo "Server xdebug ide key: $IDE_KEY"
 echo "Server xdebug port: $XDEBUG_PORT"
 
@@ -75,4 +78,5 @@ export HOST_IP="$HOST_IP"
 docker-compose --verbose build --pull
 docker-compose --verbose up -d
 
-cd backend/src/ && php -s localhost:8080
+
+cd backend/src && php -S localhost:${BACKEND_PORT}

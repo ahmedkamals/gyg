@@ -38,6 +38,10 @@ func handler(s *Server) func(http.ResponseWriter, *http.Request) {
 func (s *Server) respond(r *http.Request, w http.ResponseWriter) {
 
 	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Access-Control-Allow-Origin", "*");
+	w.Header().Set("Access-Control-Allow-Headers", "origin, content-type, accept, authorization");
+	w.Header().Set("Access-Control-Allow-Credentials", "true");
+	w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS, HEAD");
 	w.WriteHeader(http.StatusOK)
 
         searchTerm := r.URL.Query().Get("query")

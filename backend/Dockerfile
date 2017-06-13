@@ -1,7 +1,5 @@
-# Use Alpine Linux
-FROM alpine:3.4
+FROM alpine:3.6
 
-# Maintainer
 MAINTAINER Ahmed Kamal <me.ahmed.kamal+gyg@gmail.com>
 
 # persistent / runtime deps
@@ -49,9 +47,9 @@ ENV PHP_LDFLAGS="-Wl,-O1 -Wl,--hash-style=both -pie"
 
 ENV GPG_KEYS A917B1ECDA84AEC2B568FED6F50ABC807BD5DCD0 528995BFEDFBA7191D46839EF9BA0ADA31CBD89E
 
-ENV PHP_VERSION 7.1.6
-ENV PHP_URL="https://secure.php.net/get/php-7.1.6.tar.xz/from/this/mirror" PHP_ASC_URL="https://secure.php.net/get/php-7.1.6.tar.xz.asc/from/this/mirror"
-ENV PHP_SHA256="01584dc521ab7ec84b502b61952f573652fe6aa00c18d6d844fb9209f14b245b" PHP_MD5="eafc7a79cc8cc62c9292c96f9c9ccf90"
+ENV PHP_VERSION 7.1.5
+ENV PHP_URL="https://secure.php.net/get/php-7.1.5.tar.xz/from/this/mirror" PHP_ASC_URL="https://secure.php.net/get/php-7.1.5.tar.xz.asc/from/this/mirror"
+ENV PHP_SHA256="d149a3c396c45611f5dc6bf14be190f464897145a76a8e5851cf18ff7094f6ac" PHP_MD5="fb0702321c7aceac68c82b8c7a10d196"
 
 RUN set -xe; \
 	\
@@ -84,7 +82,7 @@ RUN set -xe; \
 	\
 	apk del .fetch-deps
 
-COPY docker-php-source /usr/local/bin/
+COPY snippets/docker-php-source /usr/local/bin/
 
 RUN set -xe \
 	&& apk add --no-cache --virtual .build-deps \
@@ -148,19 +146,18 @@ RUN set -xe \
 	&& pecl update-channels \
 	&& rm -rf /tmp/pear ~/.pearrc
 
-COPY docker-php-ext-* docker-php-entrypoint /usr/local/bin/
-
-# Cleaning up
-RUN mkdir -p /www/gyg && \
-apk del tzdata && \
-rm -rf /var/cache/apk/*
-
-# Set Workdir
-WORKDIR ${WORK_DIR}
-
-# Initialization script
-ADD snippets/on-start.sh /www/on-start.sh
+COPY snippets/docker-php-ext-* snippets/docker-php-entrypoint /usr/local/bin/
 
 ENTRYPOINT ["docker-php-entrypoint"]
 
-CMD ["/bin/bash", "/www/on-start.sh"]
+RUN apk update \
+    && apk add bash
+
+ENV WORK_DIR /www
+RUN mkdir WORK_DIR
+
+WORKDIR $WORK_DIR
+
+COPY . .
+
+#CMD ["bash", "$WORK_DIR/snippets/on-start.sh"]
