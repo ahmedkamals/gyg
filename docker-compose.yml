@@ -10,5 +10,5 @@ services:
         environment:
             SERVICE_NAME: middleware
             SERVICE_TAGS: local
-            CONFIG_FILE_PATH: ${CONFIG_FILE_PATH}
+            CONFIG_FILE_PATH: ${CONFIG_FILE_PATH}zz
         restart: always

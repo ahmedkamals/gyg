@@ -5,23 +5,7 @@
     <title>GYG | Search</title>
     <meta name="description" content="GetYourGuide Fullstack Take-Home Test">
     <meta name="author" content="GetYourGuide">
-
-    <style>
-        html { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, Helvetica, sans-serif; }
-        * , *:before, *:after { box-sizing: inherit; }
-        body { margin: 0; padding: 0; display: flex; flex-direction: column; }
-
-        header { position: relative; flex: 0 0 60px; border-bottom: 1px solid #e6e6e6; }
-        main { background-color: #F7F7F7; flex: 1 0 100px; padding: 60px 40px;}
-        article { background-color: white; border: 1px solid #e6e6e6; margin: 16px 32px; padding: 0 16px 16px 16px; }
-        footer { background-color: #2B2B2B; color: #9A9A9A; flex: 0 0 60px; padding: 20px 60px;}
-
-        .logo { position: absolute; top: 0; left: 60px; }
-        #search { text-align: center; }
-        .cta { display: inline-block; background-color: #00AEEF; color: white; height: 40px; padding: 10px; font-size: 14px; line-height: 20px; cursor: pointer;}
-
-        input[type="text"] { display: inline-block; width: 350px; height: 40px; padding: 8px; font-size: 14px; }
-    </style>
+    <link rel="stylesheet" href="assets/css/main.css">
 </head>
 
 <body>
@@ -43,45 +27,6 @@
     <footer>
         GetYourGuide Take-Home Test
     </footer>
-    <script>
-        var container = {
-          'Content-Type': 'application/json'
-        };
-        function getRequestParameters(input) {
-            return {
-                mode: 'no-cors',
-                handlers: container
-            };
-        }
-
-        function handleResponse(response) {
-            html = '';
-            x = response;
-            for (let index in response.tours) {
-                html += `<article><h2>${response.tours[index].title}</h2><strong>${response.tours[index].currency} ${response.tours[index].price}</strong></article>`;
-            }
-
-            const resultsSection = document.getElementById("results");
-            if (results) {
-                results.innerHTML = html;
-            }
-        }
-
-        function handleError(error) {
-            console.error('error', error);
-        }
-
-        const ctaButton = document.getElementById("submit");
-        const queryInputs = document.getElementsByName("query");
-
-        if (ctaButton && queryInputs && queryInputs[0]) {
-            ctaButton.addEventListener("click", event =>
-                fetch("http://localhost:8000/search?query=" + queryInputs[0].value, getRequestParameters(queryInputs[0]))
-                .then(response => response.json())
-                .then(handleResponse)
-                .catch(handleError)
-            );
-        }
-    </script>
+    <script src="assets/js/main.js"></script>
 </body>
 </html>

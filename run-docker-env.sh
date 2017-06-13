@@ -79,4 +79,4 @@ docker-compose --verbose build --pull
 docker-compose --verbose up -d
 
 
-cd backend/src && php -S localhost:${BACKEND_PORT}
+cd backend/src && zzphp -S localhost:${BACKEND_PORT}

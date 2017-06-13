@@ -142,12 +142,13 @@ func mergeData(tours *config.Tours, ratings *config.Ratings) (map[string]map[str
 		"tours": map[string]*Tour{},
 	}
 
+	toursData := data["tours"]
 	ratingTrack := map[string]int{}
 
 	for _, tour := range tours.Items {
 		id := strconv.Itoa(tour.Id)
 
-		data["tours"][id] = &Tour{
+		toursData[id] = &Tour{
 			Id: id,
 			Title: tour.Title,
 			Price: tour.Price,
@@ -164,15 +165,15 @@ func mergeData(tours *config.Tours, ratings *config.Ratings) (map[string]map[str
 			return nil, err
 		}
 
-		if _, ok := data[id]; ok {
+		if _, ok := toursData[id]; ok {
 			ratingTrack[id]++
-			(*data["tours"][id]).Rating += ratingValue
+			(*toursData[id]).Rating += ratingValue
 		}
 	}
 
 	for id, count := range ratingTrack {
-		ratingValue := data["tours"][id].Rating
-		(*data["tours"][id]).Rating = math.Floor(ratingValue / float64(count))
+		ratingValue := toursData[id].Rating
+		(*toursData[id]).Rating = math.Floor(ratingValue / float64(count))
 	}
 
 	return data, nil
